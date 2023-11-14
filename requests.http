@@ -1,0 +1,42 @@
+// Les méthodes "GET" permettent de récupérer les infos à l'API (Strapi).
+
+// Les méthodes "POST" permettent d'envoyer des infos à l'API (Strapi).
+
+// Attention : le format des dates est "année-mois-jour".
+
+// Attention : quand il y a une relation avec une autre collection, il faut simplement indiquer le numéro de l'ID correspondant à l'enregistrement souhaitée (ex. : faire une "Send Request" des chanteurs pour savoir l'ID du titre de ce chanteur). Strapi converti les champs relationnels en minuscules.
+
+###
+GET http://localhost:1337/api/singers
+
+###
+GET http://localhost:1337/api/musics?populate=*
+
+###
+POST http://localhost:1337/api/singers
+content-type: application/json
+
+{
+    "data": {
+        "LastName": "Delpech",
+        "FirstName": "Michel",
+        "BirthDate": "1946-01-26"
+    }
+}
+
+###
+POST http://localhost:1337/api/musics
+content-type: application/json
+
+{
+    "data": {
+        "Title": "Petit pays",
+        "Link": "https://www.youtube.com/watch?v=dTi65qoLjZI",
+        "Favorite": false,
+        "ReleaseDate": "2004-01-01",
+        "BackgroundColor": "#c3c3c3",
+        "singer": 2
+    }
+}
+
+###
