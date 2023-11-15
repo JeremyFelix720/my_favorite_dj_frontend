@@ -2,6 +2,8 @@
 
 // Les méthodes "POST" permettent d'envoyer des infos à l'API (Strapi).
 
+// "?populate" dans les routes permet de récupérer les données relationnels (ex. : le chanteur dans chaque chanson).
+
 // Attention : le format des dates est "année-mois-jour".
 
 // Attention : quand il y a une relation avec une autre collection, il faut simplement indiquer le numéro de l'ID correspondant à l'enregistrement souhaitée (ex. : faire une "Send Request" des chanteurs pour savoir l'ID du titre de ce chanteur). Strapi converti les champs relationnels en minuscules.
@@ -11,6 +13,12 @@ GET http://localhost:1337/api/singers
 
 ###
 GET http://localhost:1337/api/musics?populate=*
+
+###
+GET http://localhost:1337/api/musics?filters[Favorite][$eq]=true
+//GET /api/:pluralApiId?filters[Favorite][$eq]=true
+
+// https://docs.strapi.io/dev-docs/api/rest/filters-locale-publication (syntaxe sur la doc de Stapi pour filtrer les résultats d'une requête)
 
 ###
 POST http://localhost:1337/api/singers
@@ -40,3 +48,10 @@ content-type: application/json
 }
 
 ###
+POST  http://localhost:1337/api/auth/local
+content-type: application/json
+
+{
+    "identifier": "jeremyfelix41@gmail.com",
+    "password": "Bloupy73!"
+}
