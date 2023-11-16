@@ -5,17 +5,16 @@ import MusicCover from './MusicCover'
 
 export default function Home(){
 
-    const [favoriteMusicList, setFavoriteMusicList] = useState([] as Array<object>)
+    const [favoriteMusicsList, setFavoriteMusicsList] = useState([] as Array<object>)
 
-    const [recentMusicList, setRecentMusicList] = useState([] as Array<object>)
+    const [recentMusicsList, setRecentMusicsList] = useState([] as Array<object>)
 
     const navigate = useNavigate();
 
     // A la création du composant Home, cela récupère les enregistrements "Music" ayant pour champ "favorites = true" de l'API Strapi sous la forme d'un tableau objets.
     useEffect(() => {
-
         const getFavoriteMusics = async () => {
-            const response = await fetch("http://localhost:1337/api/musics?filters[Favorite][$eq]=true")
+            const response = await fetch("http://localhost:1337/api/musics?filters[Favorite][$eq]=true&populate=*&pagination[limit]=10")
 
             const data = await response.json() // pour pouvoir exploiter les données récupérées via l'API.
 
@@ -25,16 +24,15 @@ export default function Home(){
             console.log("data.data[0].attributes :", data.data[0].attributes)
             console.log("data.data[0].attributes.Title :", data.data[0].attributes.Title)
 
-            setFavoriteMusicList(data.data) // Le deuxième "data" est aussi un tableau d'objets.
+            setFavoriteMusicsList(data.data) // Le deuxième "data" est aussi un tableau d'objets.
         }
         getFavoriteMusics()
     }, [])
 
     // A la création du composant Home, cela récupère les enregistrements "Music" les plus récents sous la forme d'un tableau objets.
     useEffect(() => {
-
         const getRecentMusics = async () => {
-            const response = await fetch("http://localhost:1337/api/musics")
+            const response = await fetch("http://localhost:1337/api/musics?sort=createdAt:desc&pagination[limit]=10")
 
             const data = await response.json() // pour pouvoir exploiter les données récupérées via l'API.
 
@@ -44,11 +42,10 @@ export default function Home(){
             console.log("data.data[0].attributes :", data.data[0].attributes)
             console.log("data.data[0].attributes.Title :", data.data[0].attributes.Title)
 
-            setRecentMusicList(data.data) // Le deuxième "data" est aussi un tableau d'objets.
+            setRecentMusicsList(data.data) // Le deuxième "data" est aussi un tableau d'objets.
         }
         getRecentMusics()
     }, [])
-
 
     return (
         <>
@@ -60,13 +57,13 @@ export default function Home(){
                 <section className="music_sections">
                     <h2>Mes musiques préférées</h2>
                     <div className="music_list">
-                        {favoriteMusicList.map((element:any) => (
-                            <a href={element.attributes.Link} target="_blank">
+                        {favoriteMusicsList.map((element:any, index) => (
+                            <a key={index} href={element.attributes.Link} target="_blank">
                                 <div className="music_cover"
                                     style={{backgroundColor : element.attributes.BackgroundColor}}
                                 >
                                     <p>"{element.attributes.Title}"</p>
-                                    <p>Par : {}</p>
+                                    <p>Par : {element.attributes.singer.data.attributes.FirstName} {element.attributes.singer.data.attributes.LastName}</p>
                                     <p>Sorti le : {element.attributes.ReleaseDate}</p>
                                     <div className="cover_icons_line">
                                         <Link to ="/modification">
@@ -90,13 +87,13 @@ export default function Home(){
                 <section className="music_sections">
                     <h2>Derniers ajouts</h2>
                     <div className="music_list">
-                        {favoriteMusicList.map((element:any) => (
-                            <a href={element.attributes.Link} target="_blank">
+                        {recentMusicsList.map((element:any, index) => (
+                            <a key={index} href={element.attributes.Link} target="_blank">
                                 <div className="music_cover"
                                     style={{backgroundColor : element.attributes.BackgroundColor}}
                                 >
                                     <p>"{element.attributes.Title}"</p>
-                                    <p>Par : {}</p>
+                                    <p>Par : {element.attributes.singer.data.attributes.FirstName} {element.attributes.singer.data.attributes.LastName}</p>
                                     <p>Sorti le : {element.attributes.ReleaseDate}</p>
                                     <div className="cover_icons_line">
                                         <Link to ="/modification">

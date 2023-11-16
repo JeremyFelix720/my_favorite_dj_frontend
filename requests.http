@@ -15,10 +15,14 @@ GET http://localhost:1337/api/singers
 GET http://localhost:1337/api/musics?populate=*
 
 ###
-GET http://localhost:1337/api/musics?filters[Favorite][$eq]=true
-//GET /api/:pluralApiId?filters[Favorite][$eq]=true
+GET http://localhost:1337/api/musics?filters[Favorite][$eq]=true&populate=*&pagination[limit]=10
 
 // https://docs.strapi.io/dev-docs/api/rest/filters-locale-publication (syntaxe sur la doc de Stapi pour filtrer les résultats d'une requête)
+
+###
+GET http://localhost:1337/api/musics?sort=createdAt:desc&pagination[limit]=10
+
+// https://docs.strapi.io/dev-docs/api/rest/sort-pagination#sorting (syntaxe sur la doc de Strapi pour trier les résultats d'une requête)
 
 ###
 POST http://localhost:1337/api/singers
